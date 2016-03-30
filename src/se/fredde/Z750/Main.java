@@ -34,7 +34,8 @@ public class Main extends JavaPlugin implements Listener {
                 "&eZ750 is funny!",
                 "&fZ750 is pro!",
                 "&fZ750 has a huge... manhood!",
-                "&0Z&17&25&30&4 i&5s&6 d&8e&9c&ae&bn&ct&d!"
+                "&0Z&17&25&30&4 i&5s&6 d&8e&9c&ae&bn&ct&d!",
+                "&6Z750 is a taco!"
         };
     }
 
