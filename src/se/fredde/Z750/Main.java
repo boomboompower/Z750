@@ -3,6 +3,7 @@ package se.fredde.Z750;
 import org.bukkit.ChatColor;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.server.ServerListPingEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -38,8 +39,17 @@ public class Main extends JavaPlugin implements Listener {
     }
 
     @EventHandler
+    public void onPlayerJoin(PlayerJoinEvent e) {
+        e.getPlayer().sendMessage(getRandomMessage());
+    }
+
+    @EventHandler
     public void onServerListPing(ServerListPingEvent e) {
-        e.setMotd(ChatColor.translateAlternateColorCodes('&', messages[ThreadLocalRandom.current().nextInt(messages.length)]));
+        e.setMotd(getRandomMessage());
+    }
+
+    public String getRandomMessage() {
+        return ChatColor.translateAlternateColorCodes('&', messages[ThreadLocalRandom.current().nextInt(messages.length)]);
     }
 
 }
