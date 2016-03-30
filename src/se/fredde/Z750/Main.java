@@ -39,11 +39,7 @@ public class Main extends JavaPlugin implements Listener {
 
     @EventHandler
     public void onServerListPing(ServerListPingEvent e) {
-        e.setMotd(cc(messages[ThreadLocalRandom.current().nextInt(messages.length)]));
-    }
-
-    public String cc(String message) {
-        return ChatColor.translateAlternateColorCodes('&', message);
+        e.setMotd(ChatColor.translateAlternateColorCodes('&', messages[ThreadLocalRandom.current().nextInt(messages.length)]));
     }
 
 }
