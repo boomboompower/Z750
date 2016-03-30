@@ -6,40 +6,40 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.server.ServerListPingEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class Main extends JavaPlugin implements Listener {
 
-    List<String> messages = new ArrayList<>();
+    String[] messages;
 
     @Override
     public void onEnable() {
         getServer().getPluginManager().registerEvents(this, this);
-        messages.add("&0Z750 is amazing!");
-        messages.add("&1Z750 is our god!");
-        messages.add("&2Z750 is perfect!");
-        messages.add("&3Z750 is handsome!");
-        messages.add("&4Z750 is great!");
-        messages.add("&5Z750 is intelligent!");
-        messages.add("&6Z750 is cool!");
-        messages.add("&7Z750 is everything!");
-        messages.add("&8Z750 is sexy!");
-        messages.add("&9Z750 is dope!");
-        messages.add("&aZ750 is our guru!");
-        messages.add("&bZ750 is our man!");
-        messages.add("&cZ750 is strong!");
-        messages.add("&dZ750 is life!");
-        messages.add("&eZ750 is funny!");
-        messages.add("&fZ750 is pro!");
-        messages.add("&fZ750 has a huge... manhood!");
-        messages.add("&0Z&17&25&30&4 i&5s&6 d&8e&9c&ae&bn&ct&d!");
+        messages = new String[]{
+                "&0Z750 is amazing!",
+                "&1Z750 is our god!",
+                "&2Z750 is perfect!",
+                "&3Z750 is handsome!",
+                "&4Z750 is great!",
+                "&5Z750 is intelligent!",
+                "&6Z750 is cool!",
+                "&7Z750 is everything!",
+                "&8Z750 is sexy!",
+                "&9Z750 is dope!",
+                "&aZ750 is our guru!",
+                "&bZ750 is our man!",
+                "&cZ750 is strong!",
+                "&dZ750 is life!",
+                "&eZ750 is funny!",
+                "&fZ750 is pro!",
+                "&fZ750 has a huge... manhood!",
+                "&0Z&17&25&30&4 i&5s&6 d&8e&9c&ae&bn&ct&d!"
+        };
     }
 
     @EventHandler
     public void onServerListPing(ServerListPingEvent e) {
-        e.setMotd(cc(messages.get(ThreadLocalRandom.current().nextInt(messages.size()))));
+        e.setMotd(cc(messages[ThreadLocalRandom.current().nextInt(messages.length)]));
     }
 
     public String cc(String message) {
