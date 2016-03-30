@@ -34,6 +34,7 @@ public class Main extends JavaPlugin implements Listener {
         messages.add("&eZ750 is funny!");
         messages.add("&fZ750 is pro!");
         messages.add("&fZ750 has a huge... manhood!");
+        messages.add("&0Z&17&25&30&4 i&5s&6 d&8e&9c&ae&bn&ct&d!");
     }
 
     @EventHandler
