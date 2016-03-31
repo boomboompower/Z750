@@ -1,4 +1,4 @@
-package se.fredde.Z750;
+package net.bitfred.Z750;
 
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Animals;
