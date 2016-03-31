@@ -30,8 +30,8 @@ public class Main extends JavaPlugin implements Listener {
         };
         logger.info("-----------------");
         logger.info("Contributors:");
-        for (int x = 0; x < contributors.length; x++) {
-            logger.info(contributors[x]);
+        for (String contributor : contributors) {
+            logger.info(contributor);
         }
         logger.info("-----------------");
         messages = new String[]{
