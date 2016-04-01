@@ -23,8 +23,7 @@ import java.util.concurrent.ThreadLocalRandom;
 import java.util.logging.Logger;
 
 public class Main extends JavaPlugin implements Listener {
-
-    Logger logger = getLogger();
+	
     String[] contributors;
     String[] messages;
 
@@ -81,24 +80,24 @@ public class Main extends JavaPlugin implements Listener {
      * 3 = fadeOut
      */
     @EventHandler
-    public void onPlayerJoin(final PlayerJoinEvent e) {
+    public void onPlayerJoin(PlayerJoinEvent e) {
         e.getPlayer().sendMessage(getRandomMessage());
         sendTitle(e.getPlayer(), 3, 5, 3, getRandomMessage());
         sendActionBar(e.getPlayer(), getRandomMessage());
     }
     
     @EventHandler
-    public void onPlayerQuit(final PlayerQuitEvent e) {
+    public void onPlayerQuit(PlayerQuitEvent e) {
     	e.setQuitMessage(getRandomMessage());
     }
 
     @EventHandler
-    public void onServerListPing(final ServerListPingEvent e) {
+    public void onServerListPing(ServerListPingEvent e) {
         e.setMotd(getRandomMessage());
     }
 
     @EventHandler
-    public void onEntitySpawn(final EntitySpawnEvent e) {
+    public void onEntitySpawn(EntitySpawnEvent e) {
         if (e.getEntity() instanceof LivingEntity) {
             LivingEntity target = (LivingEntity) e.getEntity();
             target.setCustomName(getRandomMessage());
@@ -110,7 +109,7 @@ public class Main extends JavaPlugin implements Listener {
         return ChatColor.translateAlternateColorCodes('&', messages[ThreadLocalRandom.current().nextInt(messages.length)]);
     }
     
-    private void sendTitle(final Player p, final int fadeIn, final int stay, final int fadeOut, final String subtitle) {
+    private void sendTitle(final Player p, int fadeIn, int stay, int fadeOut, String subtitle) {
 	    String title = ChatColor.translateAlternateColorCodes('&', "&6&lZ760");
     	
 	    PlayerConnection connection = ((CraftPlayer) p).getHandle().playerConnection;
@@ -128,7 +127,7 @@ public class Main extends JavaPlugin implements Listener {
     }
     
     
-    private void sendActionBar(final Player p, final String message) {
+    private void sendActionBar(final Player p, String message) {
 	
     	IChatBaseComponent chatBase = ChatSerializer.a("{\"text\": \"" + message + "\"}");
     	PacketPlayOutChat playOutChat = new PacketPlayOutChat(chatBase, (byte) 2);
@@ -136,7 +135,7 @@ public class Main extends JavaPlugin implements Listener {
     	((CraftPlayer)p).getHandle().playerConnection.sendPacket(playOutChat);
     }
     
-    private void broadcast(final String message) {
+    private void broadcast(String message) {
     	Bukkit.getConsoleSender().sendMessage(ChatColor.translateAlternateColorCodes('&', message));
     }
 }
