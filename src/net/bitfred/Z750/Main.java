@@ -1,13 +1,21 @@
 package net.bitfred.Z750;
 
 import org.bukkit.ChatColor;
+import org.bukkit.craftbukkit.v1_9_R1.entity.CraftPlayer;
 import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntitySpawnEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.server.ServerListPingEvent;
 import org.bukkit.plugin.java.JavaPlugin;
+
+import net.minecraft.server.v1_9_R1.IChatBaseComponent;
+import net.minecraft.server.v1_9_R1.PacketPlayOutChat;
+import net.minecraft.server.v1_9_R1.PacketPlayOutTitle;
+import net.minecraft.server.v1_9_R1.PlayerConnection;
+import net.minecraft.server.v1_9_R1.IChatBaseComponent.ChatSerializer;
 
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.logging.Logger;
@@ -56,14 +64,24 @@ public class Main extends JavaPlugin implements Listener {
                 "&6Z750 is a taco!",
                 "&9Z750 is &6&ospecial!",
                 "&eZ750 is &emy amigo!",
-                "&5Z750 is sometimes here when needed! (even if late!)"
-                // boomboompower will add actionBar and title support later.
+                "&5Z750 is sometimes here when needed! (even if late!)",
+                "&1Z750 is &lbold!",
+                "&dZ750 likes &cCafeBabe&d!",
+                "&6Z750 is bae!"
         };
     }
 
+    /*
+     * For the sendTitle method
+     * 3 = fadeIn
+     * 5 = stay
+     * 3 = fadeOut
+     */
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent e) {
         e.getPlayer().sendMessage(getRandomMessage());
+        sendTitle(e.getPlayer(), 3, 5, 3, getRandomMessage());
+        sendActionBar(e.getPlayer(), getRandomMessage());
     }
 
     @EventHandler
@@ -83,5 +101,30 @@ public class Main extends JavaPlugin implements Listener {
     public String getRandomMessage() {
         return ChatColor.translateAlternateColorCodes('&', messages[ThreadLocalRandom.current().nextInt(messages.length)]);
     }
+    
+    private void sendTitle(Player p, int fadeIn, int stay, int fadeOut, String subtitle) {
+		String title = ChatColor.translateAlternateColorCodes('&', "&6&lZ760");
+    	
+		PlayerConnection connection = ((CraftPlayer) p).getHandle().playerConnection;
+			
+		PacketPlayOutTitle packetPlayOutTimes = new PacketPlayOutTitle(PacketPlayOutTitle.EnumTitleAction.TIMES, null, fadeIn, stay, fadeOut);
+	    connection.sendPacket(packetPlayOutTimes);
 
+	    IChatBaseComponent subtitleJSON = IChatBaseComponent.ChatSerializer.a("{\"text\": \"" + subtitle + "\"}");
+	    PacketPlayOutTitle packetPlayOutSubTitle = new PacketPlayOutTitle(PacketPlayOutTitle.EnumTitleAction.SUBTITLE, subtitleJSON);
+	    connection.sendPacket(packetPlayOutSubTitle);
+	       
+	    IChatBaseComponent titleJSON = IChatBaseComponent.ChatSerializer.a("{\"text\": \"" + title + "\"}");
+	    PacketPlayOutTitle packetPlayOutTitle = new PacketPlayOutTitle(PacketPlayOutTitle.EnumTitleAction.TITLE, titleJSON);
+	    connection.sendPacket(packetPlayOutTitle);
+    }
+    
+    
+    public static void sendActionBar(Player p, String message) {
+	
+    	IChatBaseComponent chatBase = ChatSerializer.a("{\"text\": \"" + message + "\"}");
+    	PacketPlayOutChat playOutChat = new PacketPlayOutChat(chatBase, (byte) 2);
+    	
+    	((CraftPlayer)p).getHandle().playerConnection.sendPacket(playOutChat);
+	}
 }
