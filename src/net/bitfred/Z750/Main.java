@@ -1,5 +1,6 @@
 package net.bitfred.Z750;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.craftbukkit.v1_9_R1.entity.CraftPlayer;
 import org.bukkit.entity.LivingEntity;
@@ -29,19 +30,20 @@ public class Main extends JavaPlugin implements Listener {
     @Override
     public void onEnable() {
         getServer().getPluginManager().registerEvents(this, this);
-        contributors = new String[]{
+        contributors = new String[] {
                 "BitFred",
                 "kato",
                 "Brianetta",
                 "LaxWasHere",
                 "boomboompower"
         };
-        logger.info("-----------------");
-        logger.info("Contributors:");
+        broadcast("&a--------&fZ750--------");
+        broadcast("&aContributors:");
         for (String contributor : contributors) {
-            logger.info(contributor);
+        	broadcast("&a" + contributor);
         }
-        logger.info("-----------------");
+        broadcast("&a--------&fZ750--------");
+        
         messages = new String[]{
                 "&0Z750 is amazing!",
                 "&1Z750 is our god!",
@@ -103,11 +105,11 @@ public class Main extends JavaPlugin implements Listener {
     }
     
     private void sendTitle(Player p, int fadeIn, int stay, int fadeOut, String subtitle) {
-		String title = ChatColor.translateAlternateColorCodes('&', "&6&lZ760");
+	    String title = ChatColor.translateAlternateColorCodes('&', "&6&lZ760");
     	
-		PlayerConnection connection = ((CraftPlayer) p).getHandle().playerConnection;
-			
-		PacketPlayOutTitle packetPlayOutTimes = new PacketPlayOutTitle(PacketPlayOutTitle.EnumTitleAction.TIMES, null, fadeIn, stay, fadeOut);
+	    PlayerConnection connection = ((CraftPlayer) p).getHandle().playerConnection;
+	    
+	    PacketPlayOutTitle packetPlayOutTimes = new PacketPlayOutTitle(PacketPlayOutTitle.EnumTitleAction.TIMES, null, fadeIn, stay, fadeOut);
 	    connection.sendPacket(packetPlayOutTimes);
 
 	    IChatBaseComponent subtitleJSON = IChatBaseComponent.ChatSerializer.a("{\"text\": \"" + subtitle + "\"}");
@@ -120,11 +122,15 @@ public class Main extends JavaPlugin implements Listener {
     }
     
     
-    public static void sendActionBar(Player p, String message) {
+    private void sendActionBar(Player p, String message) {
 	
     	IChatBaseComponent chatBase = ChatSerializer.a("{\"text\": \"" + message + "\"}");
     	PacketPlayOutChat playOutChat = new PacketPlayOutChat(chatBase, (byte) 2);
     	
     	((CraftPlayer)p).getHandle().playerConnection.sendPacket(playOutChat);
-	}
+    }
+    
+    private void broadcast(String message) {
+    	Bukkit.getConsoleSender().sendMessage(ChatColor.translateAlternateColorCodes('&', message));
+    }
 }
