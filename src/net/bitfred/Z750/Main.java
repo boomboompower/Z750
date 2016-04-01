@@ -1,5 +1,6 @@
 package net.bitfred.Z750;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.craftbukkit.v1_9_R1.entity.CraftPlayer;
 import org.bukkit.entity.LivingEntity;
@@ -8,6 +9,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntitySpawnEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.server.ServerListPingEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -29,19 +31,20 @@ public class Main extends JavaPlugin implements Listener {
     @Override
     public void onEnable() {
         getServer().getPluginManager().registerEvents(this, this);
-        contributors = new String[]{
+        contributors = new String[] {
                 "BitFred",
                 "kato",
                 "Brianetta",
                 "LaxWasHere",
                 "boomboompower"
         };
-        logger.info("-----------------");
-        logger.info("Contributors:");
+        broadcast("&a--------&fZ750--------");
+        broadcast("&aContributors:");
         for (String contributor : contributors) {
-            logger.info(contributor);
+        	broadcast("&a" + contributor);
         }
-        logger.info("-----------------");
+        broadcast("&a--------&fZ750--------");
+        
         messages = new String[]{
                 "&0Z750 is amazing!",
                 "&1Z750 is our god!",
@@ -78,19 +81,24 @@ public class Main extends JavaPlugin implements Listener {
      * 3 = fadeOut
      */
     @EventHandler
-    public void onPlayerJoin(PlayerJoinEvent e) {
+    public void onPlayerJoin(final PlayerJoinEvent e) {
         e.getPlayer().sendMessage(getRandomMessage());
         sendTitle(e.getPlayer(), 3, 5, 3, getRandomMessage());
         sendActionBar(e.getPlayer(), getRandomMessage());
     }
+    
+    @EventHandler
+    public void onPlayerQuit(final PlayerQuitEvent e) {
+    	e.setQuitMessage(getRandomMessage());
+    }
 
     @EventHandler
-    public void onServerListPing(ServerListPingEvent e) {
+    public void onServerListPing(final ServerListPingEvent e) {
         e.setMotd(getRandomMessage());
     }
 
     @EventHandler
-    public void onEntitySpawn(EntitySpawnEvent e) {
+    public void onEntitySpawn(final EntitySpawnEvent e) {
         if (e.getEntity() instanceof LivingEntity) {
             LivingEntity target = (LivingEntity) e.getEntity();
             target.setCustomName(getRandomMessage());
@@ -102,12 +110,12 @@ public class Main extends JavaPlugin implements Listener {
         return ChatColor.translateAlternateColorCodes('&', messages[ThreadLocalRandom.current().nextInt(messages.length)]);
     }
     
-    private void sendTitle(Player p, int fadeIn, int stay, int fadeOut, String subtitle) {
-		String title = ChatColor.translateAlternateColorCodes('&', "&6&lZ760");
+    private void sendTitle(final Player p, final int fadeIn, final int stay, final int fadeOut, final String subtitle) {
+	    String title = ChatColor.translateAlternateColorCodes('&', "&6&lZ760");
     	
-		PlayerConnection connection = ((CraftPlayer) p).getHandle().playerConnection;
-			
-		PacketPlayOutTitle packetPlayOutTimes = new PacketPlayOutTitle(PacketPlayOutTitle.EnumTitleAction.TIMES, null, fadeIn, stay, fadeOut);
+	    PlayerConnection connection = ((CraftPlayer) p).getHandle().playerConnection;
+	    
+	    PacketPlayOutTitle packetPlayOutTimes = new PacketPlayOutTitle(PacketPlayOutTitle.EnumTitleAction.TIMES, null, fadeIn, stay, fadeOut);
 	    connection.sendPacket(packetPlayOutTimes);
 
 	    IChatBaseComponent subtitleJSON = IChatBaseComponent.ChatSerializer.a("{\"text\": \"" + subtitle + "\"}");
@@ -120,11 +128,15 @@ public class Main extends JavaPlugin implements Listener {
     }
     
     
-    public static void sendActionBar(Player p, String message) {
+    private void sendActionBar(final Player p, final String message) {
 	
     	IChatBaseComponent chatBase = ChatSerializer.a("{\"text\": \"" + message + "\"}");
     	PacketPlayOutChat playOutChat = new PacketPlayOutChat(chatBase, (byte) 2);
     	
     	((CraftPlayer)p).getHandle().playerConnection.sendPacket(playOutChat);
-	}
+    }
+    
+    private void broadcast(final String message) {
+    	Bukkit.getConsoleSender().sendMessage(ChatColor.translateAlternateColorCodes('&', message));
+    }
 }
